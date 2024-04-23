@@ -13,7 +13,7 @@ jobs:
 
       - name: Check if the image exists
         id: check_image
-        uses: k4kratik/container-image-existence-checker
+        uses: k4kratik/container-image-existence-checker@main
         with:
           type: dockerhub
           container_repo_name: my-service-name
