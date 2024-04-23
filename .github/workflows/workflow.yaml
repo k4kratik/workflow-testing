@@ -1,0 +1,32 @@
+name: CI/CD Workflow for Service
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  ci:
+    name: CI Job
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check if the image exists
+        id: check_image
+        uses: k4kratik/container-image-existence-checker
+        with:
+          type: dockerhub
+          container_repo_name: my-service-name
+          image_tag: ${{ github.sha }}
+          dockerhub_username: ${{ secrets.DOCKERHUB_USER }}
+          dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Docker build and push (Skip this step if image exists)
+        if: steps.check_image.outputs.image_exists != 'true'
+        run: |
+          docker build -t k4kratik/shorty:${{ github.sha }} .
+          docker push k4kratik/shorty:${{ github.sha }}
+
+      - name: checking output file for debugging
+        if: steps.check_image.outputs.image_exists != 'true'
+        run: cat $GIHUB_OUTPUT
