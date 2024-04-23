@@ -16,7 +16,7 @@ jobs:
         uses: k4kratik/container-image-check-custom-action@v2
         with:
           type: dockerhub
-          container_repo_name: my-service-name
+          container_repo_name: shorty
           image_tag: ${{ github.sha }}
           dockerhub_username: ${{ secrets.DOCKERHUB_USER }}
           dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
