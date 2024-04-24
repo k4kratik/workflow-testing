@@ -1,4 +1,4 @@
-name: CI/CD Workflow for Service
+name: Docker Hub CI/CD Workflow for Service
 
 on:
   push:

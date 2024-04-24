@@ -1,7 +1,7 @@
 env:
   SERVICE_NAME: my-backend-service
 
-name: CI/CD Workflow for Service
+name: ECR CI/CD Workflow for Service
 
 on:
   push:
