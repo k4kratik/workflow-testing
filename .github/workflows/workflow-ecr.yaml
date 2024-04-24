@@ -26,7 +26,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Check if the image exists
-        uses: k4kratik/container-image-check-custom-action@v3
+        uses: k4kratik/container-image-check-custom-action@v4
         id: check_image
         with:
           type: ecr
