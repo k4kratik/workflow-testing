@@ -1,0 +1,40 @@
+env:
+  SERVICE_NAME: my-backend-service
+
+name: CI/CD Workflow for Service
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  ci:
+    name: CI Job
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Check if the image exists
+        uses: k4kratik/container-image-check-custom-action
+        id: check_image
+        with:
+          type: ecr
+          container_repo_name: ${{env.SERVICE_NAME}}
+          image_tag: ${{ github.sha }}
+
+      - name: Docker build and push to ECR (Skip this step if image exists)
+        if: steps.check_image.outputs.image_exists != 'true'
+        run: |
+          docker build -t ${{ secrets.ECR_REGISTRY }}/${{env.SERVICE_NAME}}:${{ github.sha }} .
+          docker push ${{ secrets.ECR_REGISTRY }}/${{env.SERVICE_NAME}}:${{ github.sha }}

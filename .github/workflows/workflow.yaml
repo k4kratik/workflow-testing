@@ -33,7 +33,3 @@ jobs:
         run: |
           docker build -t k4kratik/shorty:${{ github.sha }} .
           docker push k4kratik/shorty:${{ github.sha }}
-
-      - name: checking output file for debugging
-        if: steps.check_image.outputs.image_exists != 'true'
-        run: cat $GIHUB_OUTPUT
